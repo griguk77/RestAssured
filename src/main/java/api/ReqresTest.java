@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
@@ -30,5 +31,24 @@ public class ReqresTest {
             Assert.assertTrue(avatars.get(i).contains(ids.get(i)));
         }
 
+    }
+
+    @Test
+    public void successRegTest() {
+        Specifications.installSpecifications(Specifications.requestSpec(URL), Specifications.responseSpecOK200());
+        Integer id = 4;
+        String token = "QpwL5tke4Pnpja7X4";
+        Register user = new Register("eve.holt@reqres.in", "pistol");
+        SuccessReg successReg = given()
+                .body(user)
+                .when()
+                .post("api/register")
+                .then().log().all()
+                .extract().as(SuccessReg.class);
+        Assert.assertNotNull(successReg.getId());
+        Assert.assertNotNull(successReg.getToken());
+
+        Assert.assertEquals(successReg.getId(), id);
+        Assert.assertEquals(successReg.getToken(), token);
     }
 }
