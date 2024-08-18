@@ -31,4 +31,10 @@ public class Specifications {
         RestAssured.requestSpecification = request;
         RestAssured.responseSpecification = response;
     }
+
+    public static ResponseSpecification responseSpecUnique(int status) {
+        return new ResponseSpecBuilder()
+                .expectStatusCode(status)
+                .build();
+    }
 }
